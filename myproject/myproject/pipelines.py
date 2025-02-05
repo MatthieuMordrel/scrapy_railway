@@ -7,7 +7,7 @@
 
 
 import os
-import psycopg2
+import psycopg
 from typing import Dict, Any
 from scrapy import Spider
 from dotenv import load_dotenv
@@ -20,13 +20,14 @@ class PostgresPipeline:
     def open_spider(self, spider: Spider):
         """Connect using environment variables"""
         try:
-            self.connection = psycopg2.connect(
+            self.connection = psycopg.connect(
                 dbname=os.getenv("POSTGRES_DB"),
                 user=os.getenv("POSTGRES_USER"),
                 password=os.getenv("POSTGRES_PASSWORD"),
                 host=os.getenv("POSTGRES_HOST"),
                 port=os.getenv("POSTGRES_PORT", "5432")
             )
+
             self.cursor = self.connection.cursor()
             spider.logger.info("Connected to PostgreSQL successfully")
         except Exception as e:
